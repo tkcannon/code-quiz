@@ -5,7 +5,6 @@ body {
 h1 {
     font-size: 40px;
     padding-bottom: 15px;
-    border-bottom: solid grey 3px;
     margin-bottom: 15px;
 }
 
@@ -24,9 +23,13 @@ p {
     margin: 15px;
 }
 
+.btn:hover {
+    background-color: grey;
+}
+
 /*start-page*/
 #start-page {
-    display:flex;
+    display: flex;
     flex-direction: column;
     text-align: center;
     margin: 100px auto;
@@ -43,7 +46,6 @@ p {
 #quiz {
     display: none;
     justify-content: space-between;
-    display: none;
 }
 
 #high-score {

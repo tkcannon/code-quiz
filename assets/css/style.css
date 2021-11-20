@@ -1,12 +1,49 @@
-* {
+body {
+    font-size: 25px;
 }
 
-/*quiz related*/
+h1 {
+    font-size: 40px;
+    padding-bottom: 15px;
+    border-bottom: solid grey 3px;
+    margin-bottom: 15px;
+}
+
+p {
+    margin: 15px;
+}
+
+.btn {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: indigo;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 15px;
+    margin: 15px;
+}
+
+/*start-page*/
+#start-page {
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 100px auto;
+    max-width: 60%;
+}
+
+#start-quiz {
+    max-width: 50%;
+    margin: 15px auto;
+}
+
+/*quiz*/
 
 #quiz {
-    display: flex;
+    display: none;
     justify-content: space-between;
-    /*display: none;*/
+    display: none;
 }
 
 #high-score {
@@ -34,8 +71,6 @@
 .question-list li {
     justify-content: start;
     list-style: none;
-    color: white;
-    background-color: indigo;
     padding: 5px;
     margin: 5px auto;
 }

@@ -1,0 +1,43 @@
+* {
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+}
+
+#high-score {
+    flex: 1;
+}
+
+#quiz {
+    flex: 2;
+    flex-direction: column;
+    max-width: 60%;
+    margin: 100px auto;
+    border-bottom: gray solid 3px;
+}
+
+#question {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.question-list {
+    padding: 25px;
+}
+
+/* may need to create specific id for li*/
+.question-list li {
+    justify-content: start;
+    list-style: none;
+    color: white;
+    background-color: indigo;
+    padding: 5px;
+    margin: 5px auto;
+}
+
+#timer {
+    text-align: end;
+    flex: 1;
+}

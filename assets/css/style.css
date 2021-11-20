@@ -1,16 +1,19 @@
 * {
 }
 
-main {
+/*quiz related*/
+
+#quiz {
     display: flex;
     justify-content: space-between;
+    /*display: none;*/
 }
 
 #high-score {
     flex: 1;
 }
 
-#quiz {
+#question-box {
     flex: 2;
     flex-direction: column;
     max-width: 60%;

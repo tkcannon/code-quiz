@@ -17,7 +17,7 @@
             <button id="start-quiz" class="btn">Start Quiz</button>
         </div>
 
-        <div id="quiz" style="display: none;">
+        <div id="quiz" style="display: flex;">
             <h1 id="high-score">
                 High Score:
             </h1>
@@ -29,17 +29,34 @@
                     <li><button id="btn-3" class="btn"></button></li>
                     <li><button id="btn-4" class="btn"></button></li>
                 </ol>
+                <h2 id="right-wrong"></h2>
             </div>
             <h1 id="timer">
                 Time Left:
             </h1>
         </div>
- 
-        <form id="form" style="display: none" action="">
-            this is a form
-        </form>
+
+        <div id="submit-page">
+            <h1>Form Header</h1>
+            <p>Final Score appears here</p>
+            <form id="form" style="display: flex" action="su">
+                <input type="text" placeholder="Initials">
+                <input type="submit">
+            </form>
+        </div>
+
+        <div id="end-page" style="display: flex;">
+            <h1>High Scores</h1>
+            <ol id="high-score-list">
+                <li id="hs-1"></li>
+                <li id="hs-2"></li>
+                <li id="hs-3"></li>
+            </ol>
+        </div>
+
     </main>
     <script src="./assets/js/script.js"></script>
+    >
 </body>
 
 </html>

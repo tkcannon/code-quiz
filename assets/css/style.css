@@ -8,10 +8,6 @@ h1 {
     margin-bottom: 15px;
 }
 
-p {
-    margin: 15px;
-}
-
 .btn {
     font-size: 20px;
     font-weight: bold;
@@ -27,7 +23,7 @@ p {
     background-color: grey;
 }
 
-/*start-page*/
+/*Start Page*/
 #start-page {
     display: flex;
     flex-direction: column;
@@ -41,7 +37,7 @@ p {
     margin: 15px auto;
 }
 
-/*quiz*/
+/*Quiz*/
 
 #quiz {
     display: none;
@@ -80,4 +76,17 @@ p {
 #timer {
     text-align: end;
     flex: 1;
+}
+
+/*Form*/
+#submit-page {
+    flex-direction: column;
+    max-width: 60%;
+    margin: auto;
+}
+
+
+/*End Page*/
+#end-page {
+
 }

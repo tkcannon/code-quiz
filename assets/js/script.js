@@ -3,7 +3,16 @@
 //-high score /check localstorage for exisitng scores
 //-current score
 
+var activeEl;
+var startPageEl = getById("start-page");
+var formEl = getById("form");
+var quizEl = getById("quiz");
+var endPageEl = getById("end-page");
+activeEl = startPageEl;
+
 var timer = 10;
+
+scoreList = JSON.parse(localStorage.getItem(scoreList));
 
 var quiz = {
     highScore: getHighScore(),
@@ -16,6 +25,13 @@ var quiz = {
     ],
     timer: getById("timer")
 };
+
+
+
+
+
+
+
 
 var nextQuestion = 0;
 
@@ -44,19 +60,6 @@ var questionList = [
 
 var userAnswers = [];
 
-function getHighScore() {
-    var score = localStorage.getItem("high-score");
-    var scoreBoard = getById("high-score");
-    if (!score) {
-        scoreBoard.textContent = "High Score:";
-        return "";
-    }
-
-    else {
-        scoreBoard.textContent = "High Score: " + score;
-        return score;
-    }
-}
 
 //to shorten the call
 function getById(id) {
@@ -66,11 +69,8 @@ function getById(id) {
 
 function startQuiz(event) {
     if (event.target.matches("#start-quiz")) {
-        var startPageEl = getById("start-page");
-        var quizEl = getById("quiz");
-        var formEl = getById("form");
-        toggleDisplay(startPageEl);
-        toggleDisplay(quizEl);
+
+        setActiveDisplay(quizEl);
 
         var interval = setInterval(() => {
             if (timer > 0) {
@@ -78,30 +78,43 @@ function startQuiz(event) {
             }
             else {
                 clearInterval(interval);
-                toggleDisplay(quizEl);
-                toggleDisplay(formEl);
-                var score = score();
-                formEl.textContent = score;
+                setActiveDisplay(formEl);
+                score();
             }
         }, 1000);
+
+        //quiz cycle
+        getQuestion(nextQuestion);
         
         quiz.choice.forEach(element => {
             element.addEventListener("click", function () {
-                if (nextQuestion < questionList.length)
-                getQuestion(nextQuestion);
+
+                userAnswers.push(element.textContent);
+                
+                if (element.textContent === questionList[nextQuestion - 1].answer) {
+                    console.log("Correct!");
+                }
+                else {
+                    console.log("Wrong");
+                    timer -= 5;
+                }
+
+                if (nextQuestion < questionList.length) {
+                    getQuestion(nextQuestion);
+                }
                 else {
                     clearInterval(interval);
-                    toggleDisplay(quizEl);
-                    toggleDisplay(formEl);
-                    var score = score();
-                    formEl.textContent = score;
+                    setActiveDisplay(formEl);
+                    score();
                 }
             })
         });
-        
-        getQuestion(nextQuestion);
     }
 }
+
+
+
+
 
 function getQuestion(index) {
     quiz.question = questionList[index].text; //doesn't work
@@ -112,13 +125,11 @@ function getQuestion(index) {
     nextQuestion++;
 }
 
-function toggleDisplay(element) {
-    if (element.style.display === "none") {
+function setActiveDisplay(element) {
+    if (element !== activeEl) {
+        activeEl.style.display = "none";
         element.style.display = "flex";
-    }
-
-    else {
-        element.style.display = "none";
+        activeEl = element;
     }
 }
 
@@ -127,14 +138,32 @@ function countDown() {
     timer--;
 }
 
+function getHighScore {
+    if (!scoreList) {
+        return "";
+    }
+
+    else {
+        return scoreList[0];
+    }
+}
+
 function score() {
-    var correctAnswers;
+    var correctAnswers = 0;
     for (i = 0; i < userAnswers.length; i++) {
         if (userAnswers[i] === questionList[i].answer) {
             correctAnswers++;
         }
     }
-    return (correctAnswers / questionList.length) * 100;
+
+    var score = (correctAnswers / questionList.length) * 100;
+
+    if (score > quiz.highScore) {
+        formEl.textContent = "New High Score! " + score;
+    }
+    else {
+        formEl.textContent = "Score: " + score;
+    }
 }
 
 //steps

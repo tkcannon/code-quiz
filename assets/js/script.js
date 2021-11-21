@@ -3,16 +3,12 @@
 //-high score /check localstorage for exisitng scores
 //-current score
 
-var timer = 60;
-//functions
-//-questions
-//-timer
-//-score
+var timer = 10;
 
 var quiz = {
     highScore: getHighScore(),
-    question: getById("question"),
-    answers: [
+    question: getById("question").textContent,
+    choice: [
         getById("btn-1"),
         getById("btn-2"),
         getById("btn-3"),
@@ -21,11 +17,32 @@ var quiz = {
     timer: getById("timer")
 };
 
-//to shorten the call
-function getById(id) {
-    var el = document.getElementById(id);
-    return el;
-}
+var nextQuestion = 0;
+
+var questionList = [
+    {
+        text: "This is the question",
+        choices: [
+            "1.",
+            "2.",
+            "3.",
+            "4."
+        ],
+        answer: "1."
+    },
+    {
+        text: "This is the question",
+        choices: [
+            "1. 2",
+            "2. 2",
+            "3. 2",
+            "4. 2"
+        ],
+        answer: "1. 2"
+    },
+];
+
+var userAnswers = [];
 
 function getHighScore() {
     var score = localStorage.getItem("high-score");
@@ -41,25 +58,58 @@ function getHighScore() {
     }
 }
 
+//to shorten the call
+function getById(id) {
+    var el = document.getElementById(id);
+    return el;
+}
+
 function startQuiz(event) {
     if (event.target.matches("#start-quiz")) {
-        var startPageDiv = getById("start-page");
-        var quizDiv = getById("quiz");
-        toggleDisplay(startPageDiv);
-        toggleDisplay(quizDiv);
+        var startPageEl = getById("start-page");
+        var quizEl = getById("quiz");
+        var formEl = getById("form");
+        toggleDisplay(startPageEl);
+        toggleDisplay(quizEl);
 
         var interval = setInterval(() => {
-            if(timer > 0) {
+            if (timer > 0) {
                 countDown();
             }
-            else{
-                toggleDisplay(quizDiv);
+            else {
                 clearInterval(interval);
+                toggleDisplay(quizEl);
+                toggleDisplay(formEl);
+                var score = score();
+                formEl.textContent = score;
             }
         }, 1000);
-
         
+        quiz.choice.forEach(element => {
+            element.addEventListener("click", function () {
+                if (nextQuestion < questionList.length)
+                getQuestion(nextQuestion);
+                else {
+                    clearInterval(interval);
+                    toggleDisplay(quizEl);
+                    toggleDisplay(formEl);
+                    var score = score();
+                    formEl.textContent = score;
+                }
+            })
+        });
+        
+        getQuestion(nextQuestion);
     }
+}
+
+function getQuestion(index) {
+    quiz.question = questionList[index].text; //doesn't work
+    for (i = 0; i < 4; i++) {
+        quiz.choice[i].textContent = questionList[index].choices[i];
+        console.log(questionList[index].choices[i]);
+    }
+    nextQuestion++;
 }
 
 function toggleDisplay(element) {
@@ -72,121 +122,19 @@ function toggleDisplay(element) {
     }
 }
 
-function getQuestion(num) {
-    console.log("getQuestion " + num + " called");
-    var questions = [
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-        {
-            text: "1",
-            a1: "yes",
-            a2: "no",
-            a3: "maybe",
-            a4: "so?",
-            answer: "maybe"
-        },
-    ];
-
-    return questions[num];
-}
-
-function countDown () {
+function countDown() {
     quiz.timer.textContent = timer;
     timer--;
+}
+
+function score() {
+    var correctAnswers;
+    for (i = 0; i < userAnswers.length; i++) {
+        if (userAnswers[i] === questionList[i].answer) {
+            correctAnswers++;
+        }
+    }
+    return (correctAnswers / questionList.length) * 100;
 }
 
 //steps

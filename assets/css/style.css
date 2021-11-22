@@ -7,9 +7,13 @@
 }
 
 #score-submit {
-
+    flex-direction: column;
 }
 
-#high-scores {
-    
+#score-board {
+    flex-direction: column;
+}
+
+.btn {
+
 }

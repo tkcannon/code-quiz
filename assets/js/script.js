@@ -4,28 +4,30 @@
 var startEl = getById("start");
 var quizEl = getById("quiz");
 var scoreSubmitEl = getById("score-submit");
-var highScoresEl = getById("high-scores");
+var scoreBoardEl = getById("score-board");
+var answerText = getById("answer");
 var activeSection = startEl;
+var scoreBoardList = document.querySelector("#score-board-list");
 
 var quiz = {
     highScoreEl: getById("high-score"),
     questionEl: getById("question"),
     choiceEl: [
-        getById("btn-1"),
-        getById("btn-2"),
-        getById("btn-3"),
-        getById("btn-4"),
+        document.querySelector("#btn-1"),
+        document.querySelector("#btn-2"),
+        document.querySelector("#btn-3"),
+        document.querySelector("#btn-4"),
     ],
-    timerEl: getById("timer")
+    timerEl: getById("timer"),
+    activeQuestion: 0,
+    rightAnswers: 0,
+    score: 0
 };
 
-//var scoreDefault = ['', 0];
-
-var timerDefault = 10;
-
-//var highScores = JSON.parse(localStorage.getItem('scores'));
-
-//question vars
+var timerDefault = 60;
+var interval;
+var scores;
+var highScore;
 
 var questions = [
     {
@@ -36,7 +38,7 @@ var questions = [
             "3. choice 3",
             "4. choice 4"
         ],
-        answer: "1. "
+        answer: "1. choice 1"
     },
     {
         text: "placehoder quesiton 2",
@@ -46,7 +48,7 @@ var questions = [
             "3. choice 3",
             "4. choice 4"
         ],
-        answer: "2. "
+        answer: "2. choice 2"
     },
     {
         text: "placehoder quesiton 3",
@@ -56,7 +58,7 @@ var questions = [
             "3. choice 3",
             "4. choice 4"
         ],
-        answer: "3. "
+        answer: "3. choice 3"
     },
     {
         text: "placehoder quesiton 4",
@@ -66,7 +68,7 @@ var questions = [
             "3. choice 3",
             "4. choice 4"
         ],
-        answer: "4. "
+        answer: "4. choice 4"
     },
 
 ];
@@ -74,132 +76,118 @@ var questions = [
 //funcions
 
 //start quiz
-function startQuiz(event) {
-    if (event.target.matches("#start-btn") || event.target.matches("#restart-btn")) {
-       // var score = scoreDefault;
-        var timer = timerDefault;
+function startQuiz() {
 
-        displaySection(quizEl);
+    scores = JSON.parse(localStorage.getItem("scores"));
 
-        //timer
-        var interval = setInterval(() => {
-            if (timer > 0) {
-                quiz.timerEl.textContent = "Time Left: " + timer;
-                timer--;
+    if (!scores) {
+        scores = {
+            scoreList: [
+
+            ]
+        };
+        quiz.highScoreEl.textContent = "High Score: none";
+    }
+    else {
+        highScore = scores.scoreList[0][1];
+        scores.scoreList.forEach(element => {
+            if (element[1] > highScore) {
+                highScore = element[1];
             }
-            else {
-                clearInterval(interval);
-                displaySection(scoreSubmitEl);
-                submitH1 = getById("submit-form-h1");
-                submitH1.textContent = "You ran out of time!";
-            }
-        }, 1000);
-
-        //start questions
-        var activeQuestion = 0;
-        var rightAnswers = 0;
-
-        getQuestion(activeQuestion);
-
-        quiz.choiceEl.forEach(element => {
-            element.addEventListener("click", function () {
-                feedBackText = getById("correct-wrong");
-                if (element.textContent === questions[activeQuestion].answer) {
-                    feedBackText.textContent = "correct";
-                    rightAnswers++;
-                }
-
-                else {
-                    feedBackText.textContent = "wrong";
-                }
-
-                activeQuestion++;
-                if (activeQuestion < questions.length) {
-                    getQuestion(activeQuestion);
-                }
-                else {
-                    clearInterval(interval)
-                    displaySection(scoreSubmitEl);
-                }
-            })
         });
-
-        // score[1] = Math.ceil(rightAnswers / questions.length * 100);
-        // getById("final-score").textContent = score[1];
-
-        // getById("submit-btn").addEventListener("click", function (event) {
-        //     event.preventDefault();
-        //     var name = getById("name").value;
-        //     if (name != null) {
-        //         score[0] = name;
-        //         refreshHighScores(score);
-        //         listHighScores();
-        //         displaySection(highScoresEl);
-        //     }
-        // });
+        quiz.highScoreEl.textContent = "High Score: " + highScore;
     }
+
+    var timer = timerDefault;
+    displaySection(quizEl);
+
+    //timer
+    interval = setInterval(() => {
+        if (timer > 0) {
+            quiz.timerEl.textContent = "Time Left: " + timer;
+            timer--;
+        }
+        else {
+            clearInterval(interval);
+            submitH1 = getById("submit-form-h1");
+            submitH1.textContent = "You ran out of time!";
+            score(quiz.rightAnswers);
+            displaySection(scoreBoardEl);
+        }
+    }, 1000);
+
+    //start questions
+    getQuestion();
 }
 
-//get next question
-function getQuestion(num) {
-    quiz.questionEl.textContent = questions[num].text;
+function restartQuiz() {
+    //reset data
+    quiz.score = 0;
+    quiz.rightAnswers = 0;
+    quiz.activeQuestion = 0;
+    startQuiz();
+}
+
+function getQuestion() {
+    quiz.questionEl.textContent = questions[quiz.activeQuestion].text;
     for (i = 0; i < 4; i++) {
-        quiz.choiceEl[i].textContent = questions[num].choices[i];
+        quiz.choiceEl[i].textContent = questions[quiz.activeQuestion].choices[i];
     }
 }
 
-//score
+function checkAnswer(event) {
+    if (event.target.textContent === questions[quiz.activeQuestion].answer) {
+        quiz.rightAnswers++;
+        answerText.textContent = "Correct!";
+    }
+    else {
+        answerText.textContent = "Wrong"
+    }
+    quiz.activeQuestion++;
+    if (quiz.activeQuestion < questions.length) {
+        getQuestion();
+    }
+    else {
+        clearInterval(interval);
+        score(quiz.rightAnswers);
+        displaySection(scoreSubmitEl);
+    }
+}
 
-//set new high score if applicable
-//doesn't work properly
-// function refreshHighScores(newScore) {
-//     if (!highScores) {
-//         highScores = {
-//             first: newScore,
-//             second: ["", ""],
-//             third: ["", ""]
-//         }
-//     }
-//     else if (newScore > highScores.first[1]) {
-//         highScores.third = highScores.second;
-//         highScores.second = highScores.first;
-//         highScores.first = newScore;
-//     }
-//     else if (newScore > highScores.second[1]) {
-//         highScores.third = highScores.second;
-//         highScores.second = newScore;
-//     }
-//     else if (newScore > highScores.third[1]) {
-//         highScores.third = newScore;
-//     }
+function score(num) {
+    quiz.score = Math.ceil(num / questions.length * 100);
+    var finalScore = getById("final-score");
+    if (quiz.score > highScore) {
+        finalScore.textContent = "Congratulations! You got a new High Score! Your score: " + quiz.score;
+    }
+    else {
+        finalScore.textContent = "Your score: " + quiz.score;
+    }
+}
 
-//     localStorage.setItem("scores", JSON.stringify(highScores));
-// }
+function submitScore(event) {
+    event.preventDefault();
+    var name = getById("name").value;
+    scores.scoreList.push([name, quiz.score]);
+    updateScores();
+    displaySection(scoreBoardEl);
+}
 
-//high score list
-//unfinished
-// function listHighScores() {
-//     var hsList = [
-//         getById("hs-1"),
-//         getById("hs-2"),
-//         getById("hs-3"),
-//     ];
+function updateScores(clear) {
+    scoreBoardList.innerHTML = "";
+    scores.scoreList.forEach(element => {
+        var li = document.createElement("li");
+        li.textContent = element;
+        scoreBoardList.appendChild(li);
+    });
+    localStorage.setItem("scores", JSON.stringify(scores));
+}
 
-//     hsList[0].textContent = highScores.first;
-//     hsList[1].textContent = highScores.second;
-//     hsList[2].textContent = highScores.third;
-// }
-
-//clear high scores
-// function clearHighScores(event) {
-//     if (event.target.matches("#clear-high-scores")) {
-//         localStorage.clear();
-//         highScores.first = ["", ""];
-//         highScores.second = ["", ""];
-//         highScores.third = ["", ""];
-//         listHighScores();
-//     }
-// }
+function clearScores() {
+    console.log(scores);
+    localStorage.clear();
+    updateScores();
+}
 
 //shorten document.getElementById
 function getById(el) {
@@ -216,6 +204,10 @@ function displaySection(el) {
     }
 }
 
-document.getElementById("start-btn").addEventListener("click", startQuiz);
-document.getElementById("clear-high-scores").addEventListener("click", clearHighScores);
-document.getElementById("restart-btn").addEventListener("click", startQuiz);
+document.querySelector("#start-btn").addEventListener("click", startQuiz);
+quiz.choiceEl.forEach(element => {
+    element.addEventListener("click", checkAnswer)
+});
+document.querySelector("#submit-btn").addEventListener("click", submitScore);
+document.querySelector("#restart-btn").addEventListener("click", restartQuiz);
+getById("clear-score-board").addEventListener("click", clearScores());

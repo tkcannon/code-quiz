@@ -1,92 +1,19 @@
-body {
-    font-size: 25px;
+#start {
+
 }
 
-h1 {
-    font-size: 40px;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
+#quiz {
+
+}
+
+#score-submit {
+    flex-direction: column;
+}
+
+#score-board {
+    flex-direction: column;
 }
 
 .btn {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    background-color: indigo;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 15px;
-    margin: 15px;
-}
-
-.btn:hover {
-    background-color: grey;
-}
-
-/*Start Page*/
-#start-page {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    margin: 100px auto;
-    max-width: 60%;
-}
-
-#start-quiz {
-    max-width: 50%;
-    margin: 15px auto;
-}
-
-/*Quiz*/
-
-#quiz {
-    display: none;
-    justify-content: space-between;
-}
-
-#high-score {
-    flex: 1;
-}
-
-#question-box {
-    flex: 2;
-    flex-direction: column;
-    max-width: 60%;
-    margin: 100px auto;
-    border-bottom: gray solid 3px;
-}
-
-#question {
-    font-size: 50px;
-    font-weight: bold;
-}
-
-.question-list {
-    padding: 25px;
-}
-
-/* may need to create specific id for li*/
-.question-list li {
-    justify-content: start;
-    list-style: none;
-    padding: 5px;
-    margin: 5px auto;
-}
-
-#timer {
-    text-align: end;
-    flex: 1;
-}
-
-/*Form*/
-#submit-page {
-    flex-direction: column;
-    max-width: 60%;
-    margin: auto;
-}
-
-
-/*End Page*/
-#end-page {
 
 }

@@ -19,11 +19,11 @@ var quiz = {
     timerEl: getById("timer")
 };
 
-var scoreDefault = ['', 0];
+//var scoreDefault = ['', 0];
 
 var timerDefault = 10;
 
-var highScores = JSON.parse(localStorage.getItem('scores'));
+//var highScores = JSON.parse(localStorage.getItem('scores'));
 
 //question vars
 
@@ -31,33 +31,44 @@ var questions = [
     {
         text: "placehoder quesiton",
         choices: [
-            "1. ",
-            "2. ",
-            "3. ",
-            "4. "
+            "1. choice 1",
+            "2. choice 2",
+            "3. choice 3",
+            "4. choice 4"
         ],
         answer: "1. "
     },
     {
         text: "placehoder quesiton 2",
         choices: [
-            "1. ",
-            "2. ",
-            "3. ",
-            "4. "
+            "1. choice 1",
+            "2. choice 2",
+            "3. choice 3",
+            "4. choice 4"
         ],
         answer: "2. "
     },
     {
         text: "placehoder quesiton 3",
         choices: [
-            "1. ",
-            "2. ",
-            "3. ",
-            "4. "
+            "1. choice 1",
+            "2. choice 2",
+            "3. choice 3",
+            "4. choice 4"
         ],
         answer: "3. "
-    }
+    },
+    {
+        text: "placehoder quesiton 4",
+        choices: [
+            "1. choice 1",
+            "2. choice 2",
+            "3. choice 3",
+            "4. choice 4"
+        ],
+        answer: "4. "
+    },
+
 ];
 
 //funcions
@@ -65,7 +76,7 @@ var questions = [
 //start quiz
 function startQuiz(event) {
     if (event.target.matches("#start-btn") || event.target.matches("#restart-btn")) {
-        var score = scoreDefault;
+       // var score = scoreDefault;
         var timer = timerDefault;
 
         displaySection(quizEl);
@@ -113,19 +124,19 @@ function startQuiz(event) {
             })
         });
 
-        score[1] = Math.ceil(rightAnswers / questions.length * 100);
-        getById("final-score").textContent = score[1];
+        // score[1] = Math.ceil(rightAnswers / questions.length * 100);
+        // getById("final-score").textContent = score[1];
 
-        getById("submit-btn").addEventListener("click", function (event) {
-            event.preventDefault();
-            var name = getById("name").value;
-            if (name != null) {
-                score[0] = name;
-                refreshHighScores(score);
-                listHighScores();
-                displaySection(highScoresEl);
-            }
-        });
+        // getById("submit-btn").addEventListener("click", function (event) {
+        //     event.preventDefault();
+        //     var name = getById("name").value;
+        //     if (name != null) {
+        //         score[0] = name;
+        //         refreshHighScores(score);
+        //         listHighScores();
+        //         displaySection(highScoresEl);
+        //     }
+        // });
     }
 }
 
@@ -141,54 +152,54 @@ function getQuestion(num) {
 
 //set new high score if applicable
 //doesn't work properly
-function refreshHighScores(newScore) {
-    if (!highScores) {
-        highScores = {
-            first: newScore,
-            second: ["", ""],
-            third: ["", ""]
-        }
-    }
-    else if (newScore > highScores.first[1]) {
-        highScores.third = highScores.second;
-        highScores.second = highScores.first;
-        highScores.first = newScore;
-    }
-    else if (newScore > highScores.second[1]) {
-        highScores.third = highScores.second;
-        highScores.second = newScore;
-    }
-    else if (newScore > highScores.third[1]) {
-        highScores.third = newScore;
-    }
+// function refreshHighScores(newScore) {
+//     if (!highScores) {
+//         highScores = {
+//             first: newScore,
+//             second: ["", ""],
+//             third: ["", ""]
+//         }
+//     }
+//     else if (newScore > highScores.first[1]) {
+//         highScores.third = highScores.second;
+//         highScores.second = highScores.first;
+//         highScores.first = newScore;
+//     }
+//     else if (newScore > highScores.second[1]) {
+//         highScores.third = highScores.second;
+//         highScores.second = newScore;
+//     }
+//     else if (newScore > highScores.third[1]) {
+//         highScores.third = newScore;
+//     }
 
-    localStorage.setItem("scores", JSON.stringify(highScores));
-}
+//     localStorage.setItem("scores", JSON.stringify(highScores));
+// }
 
 //high score list
 //unfinished
-function listHighScores() {
-    var hsList = [
-        getById("hs-1"),
-        getById("hs-2"),
-        getById("hs-3"),
-    ];
+// function listHighScores() {
+//     var hsList = [
+//         getById("hs-1"),
+//         getById("hs-2"),
+//         getById("hs-3"),
+//     ];
 
-    hsList[0].textContent = highScores.first;
-    hsList[1].textContent = highScores.second;
-    hsList[2].textContent = highScores.third;
-}
+//     hsList[0].textContent = highScores.first;
+//     hsList[1].textContent = highScores.second;
+//     hsList[2].textContent = highScores.third;
+// }
 
 //clear high scores
-function clearHighScores(event) {
-    if (event.target.matches("#clear-high-scores")) {
-        localStorage.clear();
-        highScores.first = ["", ""];
-        highScores.second = ["", ""];
-        highScores.third = ["", ""];
-        listHighScores();
-    }
-}
+// function clearHighScores(event) {
+//     if (event.target.matches("#clear-high-scores")) {
+//         localStorage.clear();
+//         highScores.first = ["", ""];
+//         highScores.second = ["", ""];
+//         highScores.third = ["", ""];
+//         listHighScores();
+//     }
+// }
 
 //shorten document.getElementById
 function getById(el) {

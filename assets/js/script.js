@@ -12,7 +12,7 @@ activeEl = startPageEl;
 
 var timer = 10;
 
-scoreList = JSON.parse(localStorage.getItem(scoreList));
+scoreList = JSON.parse(localStorage.getItem("score"));
 
 var quiz = {
     highScore: getHighScore(),
@@ -25,12 +25,6 @@ var quiz = {
     ],
     timer: getById("timer")
 };
-
-
-
-
-
-
 
 
 var nextQuestion = 0;
@@ -138,7 +132,7 @@ function countDown() {
     timer--;
 }
 
-function getHighScore {
+function getHighScore () {
     if (!scoreList) {
         return "";
     }
